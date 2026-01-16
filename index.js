@@ -1,6 +1,6 @@
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
-const config = require('./src/config.json');
+
 
 const client = new Client({
   intents: [
@@ -23,4 +23,12 @@ client.on('interactionCreate', interaction => {
   if (command) command.execute(interaction);
 });
 
-client.login(config.token);
+
+const TOKEN = process.env.BOT_TOKEN;
+
+if (!TOKEN) {
+  console.error('❌ BOT_TOKEN não encontrado');
+  process.exit(1);
+}
+
+client.login(TOKEN);
