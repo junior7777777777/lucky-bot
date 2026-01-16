@@ -9,10 +9,19 @@ const client = new Client({
   ]
 });
 
+const fs = require('fs');
+const path = require('path');
+
 client.commands = new Collection();
 
-const commandFiles =fs.readdirSync('./src/commands').filter(f => f.endsWith('.js'));
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
 for (const file of commandFiles) {
+  const filePath = path.join(commandsPath, file);
+  const command = require(filePath);
+  client.commands.set(command.data.name, command);
+}
  const command = require(`./src/commands/${file}`);
   client.commands.set(command.data.name, command);
 }
@@ -34,3 +43,4 @@ if (!TOKEN) {
 client.login(TOKEN);
 
 fix commands directory path
+
